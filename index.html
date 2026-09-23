@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prueba AR</title>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; }
+    #estado { position: fixed; top: 12px; left: 12px; right: 12px; z-index: 99; padding: 12px 14px;
+      font: 18px system-ui, sans-serif; background: #dfd9c2; color: #3b2b16; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div id="estado">Buscando la imagen…</div>
+  <a-scene mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind"
+    vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+    <a-entity id="marca" mindar-image-target="targetIndex: 0">
+      <a-plane color="#98a1d2" opacity="0.7" width="1" height="0.55"></a-plane>
+      <a-box color="#4d512b" width="0.25" height="0.25" depth="0.25" position="0 0 0.15"
+        animation="property: rotation; to: 0 360 0; loop: true; dur: 4000; easing: linear"></a-box>
+    </a-entity>
+  </a-scene>
+  <script>
+    const estado = document.querySelector("#estado");
+    const marca = document.querySelector("#marca");
+    document.querySelector("a-scene").addEventListener("arError", () => estado.textContent = "Error: no se pudo abrir la cámara");
+    marca.addEventListener("targetFound", () => estado.textContent = "¡Funciona! Imagen encontrada");
+    marca.addEventListener("targetLost", () => estado.textContent = "Se perdió la imagen, vuelve a apuntar");
+  </script>
+</body>
+</html>
